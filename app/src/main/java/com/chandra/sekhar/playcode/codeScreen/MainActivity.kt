@@ -1,12 +1,13 @@
-package com.chandra.sekhar.playcode
+package com.chandra.sekhar.playcode.codeScreen
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.chandra.sekhar.playcode.databinding.ActivityMainBinding
 
 
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private lateinit var bind : ActivityMainBinding
+    private lateinit var viewModel: CodeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,50 +27,56 @@ class MainActivity : AppCompatActivity() {
         bind = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
+        initialize()
+    }
+
+    private fun initialize() {
         // check for runtime permission
         registerForPermission.launch(permissions)
+
+        // load viewModel
+        viewModel = ViewModelProvider(this@MainActivity)[CodeViewModel::class.java]
+
+        // set lifecycle owner
+        bind.lifecycleOwner = this
+
     }
 
 
     override fun onResume() {
         super.onResume()
 
-        bind.camera.setOnClickListener{
-            getDataFromCamera()
-        }
-        bind.file.setOnClickListener{
-            getDataFromFile()
+        // on click-listener
+        bind.codePicker.setOnClickListener {
+            pickAndCropImage()
         }
 
     }
 
-    private fun getDataFromFile() {
-        registerForFile.launch("image/*")
-    }
-    // Get data for file select:
-    private val registerForFile = registerForActivityResult(
-        ActivityResultContracts.GetContent()){
 
-//        bind.camera.setImageURI(it)
+    private fun pickAndCropImage() {
+        cropImage.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.ON)
+            }
+        )
 
-    }
-
-    private fun getDataFromCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        registerForCamera.launch(intent)
     }
 
-    // Get data for camera click:
-    private val registerForCamera = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if(it.resultCode == RESULT_OK && it.data != null){
-
-            val bundle = it.data!!.extras
-            val bitmap = bundle?.get("data") as Bitmap
-
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val uriContent = result.uriContent
+            if (uriContent != null) {
+                viewModel.setUri(uriContent)
+            }
+        } else {
+            // an error occurred
+            Toast.makeText(this@MainActivity, "Error occurred ", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     // Check for multiple permission
     private val registerForPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ it ->
@@ -77,5 +85,4 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }
