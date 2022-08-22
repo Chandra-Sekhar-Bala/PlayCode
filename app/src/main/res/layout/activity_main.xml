@@ -12,41 +12,92 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".codeScreen.MainActivity"
-        >
+        android:background="@color/darkGrey"
+        tools:context=".codeScreen.MainActivity">
+
+        <Spinner
+            android:id="@+id/langOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:backgroundTint="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.amrdeveloper.codeview.CodeView
             android:id="@+id/codeView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:background="@color/darkGrey"
             android:dropDownWidth="150dp"
             android:dropDownHorizontalOffset="0dp"
             android:dropDownSelector="@color/darkGrey"
             android:gravity="top|start"
+            android:padding="16dp"
+            android:scrollbars="vertical"
             android:textColor="@color/Btn_bg"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/input_text"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@+id/langOption"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/codePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/button_bg"
             android:drawableLeft="@drawable/code"
+            android:fadingEdge="horizontal"
             android:fontFamily="monospace"
-            android:text="Load Some Code"
+            android:text="Get Code"
             android:textAllCaps="false"
-            android:textSize="16sp"
+            android:textSize="13sp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.629"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
+        <EditText
+            android:id="@+id/input_text"
+            style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_bg"
+            android:backgroundTint="#EDE9E9"
+            android:gravity="top|start"
+            android:hint="Input goes here"
+            android:lines="10"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/codePicker"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/runCode"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <Button
+            android:id="@+id/runCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_bg"
+            android:backgroundTint="@color/white"
+            android:text="Run code"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:drawableEnd="@drawable/code"
+            app:layout_constraintBottom_toTopOf="@+id/codePicker"
+            app:layout_constraintEnd_toEndOf="@+id/codePicker"
+            app:layout_constraintStart_toStartOf="@+id/codePicker" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

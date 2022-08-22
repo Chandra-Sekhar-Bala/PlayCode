@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         registerForPermission.launch(permissions)
 
         // load viewModel
-        viewModel = ViewModelProvider(this@MainActivity)[CodeViewModel::class.java]
+        val viewModelFactory = CodeViewModelFactory(this)
+        viewModel = ViewModelProvider(this@MainActivity, viewModelFactory)[CodeViewModel::class.java]
 
         // set lifecycle owner
         bind.lifecycleOwner = this
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() {
         // on click-listener
         bind.codePicker.setOnClickListener {
             pickAndCropImage()
+        }
+
+        viewModel.code.observe(this@MainActivity){
+            bind.codeView.setText(it)
         }
 
     }

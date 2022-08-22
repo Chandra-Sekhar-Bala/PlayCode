@@ -48,8 +48,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-    // Google vision
-    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    // Google Text recognition ML kit
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.1'
 
     // Image cropper
     implementation 'com.github.CanHub:Android-Image-Cropper:4.3.1'
