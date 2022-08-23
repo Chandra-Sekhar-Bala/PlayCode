@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="Languages" >
+        <item>Language</item>
+        <item>c</item>
+        <item>c++</item>
+        <item>java</item>
+        <item>python</item>
+    </array>
+</resources>
