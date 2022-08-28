@@ -10,7 +10,7 @@
 
 # Developep Setup 
 1. Fork this project 
-2. Go to Android studio or [download from here] (https://developer.android.com/studio)
+2. Go to Android studio or [download from here](https://developer.android.com/studio)
 3. Click on -> File -> New -> Project from version control
 4. Paste to clone
 ``` 
