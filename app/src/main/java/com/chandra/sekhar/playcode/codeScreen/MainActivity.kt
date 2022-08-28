@@ -1,8 +1,11 @@
 package com.chandra.sekhar.playcode.codeScreen
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -14,9 +17,21 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.chandra.sekhar.playcode.R
 import com.chandra.sekhar.playcode.databinding.ActivityMainBinding
+import java.util.regex.Pattern
 
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+    //Language Keywords
+    private val PATTERN_KEYWORDS: Pattern = Pattern.compile(
+        "\\b(abstract|boolean|break|byte|case|catch" +
+                "|char|class|continue|default|do|double|else" +
+                "|enum|extends|final|finally|float|for|if" +
+                "|implements|import|instanceof|int|interface" +
+                "|long|native|new|null|package|private|protected" +
+                "|public|return|short|static|strictfp|super|switch" +
+                "|synchronized|this|throw|transient|try|void|volatile|while)\\b"
+    )
 
     private val permissions: Array<String> = arrayOf(
         android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -49,6 +64,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // Set-up spinner adapter
         language  = this.resources.getStringArray(R.array.Languages)
         bind.langOption.adapter = ArrayAdapter(this, R.layout.spinner_item, language)
+
+        // setup code view
+        bind.codeView.setEnableLineNumber(true)
+        bind.codeView.setLineNumberTextColor(Color.GRAY)
+        bind.codeView.setLineNumberTextSize(35f)
+        bind.codeView.setEnableAutoIndentation(true)
+        bind.codeView.addSyntaxPattern(PATTERN_KEYWORDS, Color.CYAN)
     }
 
 
@@ -58,15 +80,34 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // Spinner click listener is this activity
         bind.langOption.onItemSelectedListener = this
 
+
+        viewModel.code.observe(this){
+            bind.codeView.setText(it)
+        }
+        clickListeners()
+    }
+
+    private fun clickListeners() {
+
         // on click-listener
         bind.codePicker.setOnClickListener {
             pickAndCropImage()
         }
 
-        viewModel.code.observe(this@MainActivity){
-            bind.codeView.setText(it)
+        bind.runCode.setOnClickListener{
+            compileCode()
         }
+        bind.hideOutputScreen.setOnClickListener{
+            bind.outputScreen.visibility = View.GONE
+        }
+    }
 
+    /**
+     * Check for code validation and get the data from internet
+     */
+    private fun compileCode() {
+        bind.outputScreen.visibility = View.VISIBLE
+        bind.outputScreen.animation = AnimationUtils.loadAnimation(this, R.anim.btu)
     }
 
     /*
@@ -77,24 +118,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         cropImage.launch(
             options {
                 setGuidelines(CropImageView.Guidelines.ON)
-            }
-        )
-
+            })
     }
     // getting image work done:
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             // use the returned uri
-            val uriContent = result.uriContent
-            if (uriContent != null) {
-                viewModel.setUri(uriContent)
-            }
+            result.uriContent?.let { viewModel.setUri(it) }
         } else {
             // an error occurred
             Toast.makeText(this@MainActivity, "No file chosen", Toast.LENGTH_SHORT).show()
         }
     }
-
 
 
     // Check for multiple permission
@@ -106,32 +141,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    /**
-     *
-     * Callback method to be invoked when an item in this view has been
-     * selected. This callback is invoked only when the newly selected
-     * position is different from the previously selected position or if
-     * there was no selected item.
-     *
-     * Implementers can call getItemAtPosition(position) if they need to access the
-     * data associated with the selected item.
-     *
-     * @param parent The AdapterView where the selection happened
-     * @param view The view within the AdapterView that was clicked
-     * @param position The position of the view in the adapter
-     * @param id The row id of the item that is selected
-     */
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Log.e("SPINNER","POS: $position")
     }
-
-    /**
-     * Callback method to be invoked when the selection disappears from this
-     * view. The selection can disappear for instance when touch is activated
-     * or when the adapter becomes empty.
-     *
-     * @param parent The AdapterView that now contains no selected item.
-     */
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
     }

@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Btn_bg">#DF0A7F</color>
     <color name="darkGrey">#222222</color>
+    <color name="grey">#7A7474</color>
     <color name="dim_yellow">#F17B13</color>
 </resources>

@@ -56,5 +56,7 @@ dependencies {
 
     // codeView
     implementation 'io.github.amrdeveloper:codeview:1.3.5'
+    // For BotttomSheet frag
+    implementation 'com.google.android.material:material:1.6.1'
 
 }
