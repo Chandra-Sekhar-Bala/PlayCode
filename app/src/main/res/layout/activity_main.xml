@@ -7,14 +7,14 @@
 
         <variable
             name="codeViewModel"
-            type="com.chandra.sekhar.playcode.codeScreen.CodeViewModel" />
+            type="com.chandra.sekhar.playcode.codeScreen.ui.CodeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#3E3939"
-        tools:context=".codeScreen.MainActivity">
+        tools:context=".codeScreen.ui.MainActivity">
 
 
         <Spinner
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:popupBackground="@color/white"
+            android:popupBackground="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,23 +128,37 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/memory"
+                style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|start"
+                android:typeface="monospace"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/hide_output_screen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
                 android:id="@+id/output_text"
                 style="@style/ThemeOverlay.Material3.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:gravity="top|start"
-                android:hint="Output goes here : Hello world lol"
+                android:hint="Processing output"
                 android:lines="1000"
                 android:padding="16dp"
+                android:textSize="18sp"
                 android:scrollbars="vertical"
                 android:textColor="@color/black"
-                android:textColorHint="@color/darkGrey"
-                app:layout_constraintTop_toBottomOf="@+id/hide_output_screen"
+                android:textColorHint="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/memory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ProgressBar
-                android:id="@+id/load_output"
+                android:id="@+id/output_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"

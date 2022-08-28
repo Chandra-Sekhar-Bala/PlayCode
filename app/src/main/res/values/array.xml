@@ -4,8 +4,8 @@
     <array name="Languages" >
         <item>Language</item>
         <item>c</item>
-        <item>c++</item>
+        <item>cpp</item>
         <item>java</item>
-        <item>python</item>
+        <item>python3</item>
     </array>
 </resources>

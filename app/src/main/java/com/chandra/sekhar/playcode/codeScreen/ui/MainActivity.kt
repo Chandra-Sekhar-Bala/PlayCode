@@ -1,10 +1,9 @@
-package com.chandra.sekhar.playcode.codeScreen
+package com.chandra.sekhar.playcode.codeScreen.ui
 
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,6 +15,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.chandra.sekhar.playcode.R
+import com.chandra.sekhar.playcode.codeScreen.repo.network.ProgramModel
 import com.chandra.sekhar.playcode.databinding.ActivityMainBinding
 import java.util.regex.Pattern
 
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var bind : ActivityMainBinding
     private lateinit var viewModel: CodeViewModel
     private lateinit var language : Array<String>
+    private var position = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,15 +77,33 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
+        // Listen to click listeners
+        clickListeners()
 
         // Spinner click listener is this activity
         bind.langOption.onItemSelectedListener = this
 
-
+        /*
+        * ViewModel observers
+        * */
         viewModel.code.observe(this){
             bind.codeView.setText(it)
         }
-        clickListeners()
+
+        viewModel.output.observe(this){op->
+            compileCode()
+            bind.outputText.text = op.output
+            bind.memory.text = getString(R.string.time_and_memory, op.cpuTime, op.memory)
+        }
+
+        viewModel.status.observe(this){ status->
+            compileCode()
+            bind.outputProgress.visibility = when(status){
+                ApiStatus.LOADING -> View.VISIBLE
+                ApiStatus.DONE -> View.GONE
+                ApiStatus.ERROR -> View.GONE
+            }
+        }
     }
 
     private fun clickListeners() {
@@ -93,10 +112,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         bind.codePicker.setOnClickListener {
             pickAndCropImage()
         }
-
+        /*
+        * pass data to the ViewModel, call intern and get th work done
+        * */
         bind.runCode.setOnClickListener{
-            compileCode()
+            if(bind.codeView.text.isNotEmpty() && position!= 0){
+                val model = ProgramModel(bind.codeView.text.toString(), language[position], bind.inputText.text.toString())
+                viewModel.runCode(model)
+            }else{
+                Toast.makeText(this, "Language selection or Code mission", Toast.LENGTH_SHORT).show()
+            }
         }
+
         bind.hideOutputScreen.setOnClickListener{
             bind.outputScreen.visibility = View.GONE
         }
@@ -106,8 +133,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
      * Check for code validation and get the data from internet
      */
     private fun compileCode() {
-        bind.outputScreen.visibility = View.VISIBLE
-        bind.outputScreen.animation = AnimationUtils.loadAnimation(this, R.anim.btu)
+
+        if(bind.outputScreen.visibility != View.VISIBLE){
+            bind.outputScreen.visibility = View.VISIBLE
+            bind.outputScreen.animation = AnimationUtils.loadAnimation(this, R.anim.btu)
+        }
+
     }
 
     /*
@@ -142,7 +173,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        Log.e("SPINNER","POS: $position")
+        this.position = position
     }
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")

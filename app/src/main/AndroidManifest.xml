@@ -18,7 +18,7 @@
         android:theme="@style/Theme.PlayCode"
         tools:targetApi="31">
         <activity
-            android:name=".codeScreen.MainActivity"
+            android:name=".codeScreen.ui.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>

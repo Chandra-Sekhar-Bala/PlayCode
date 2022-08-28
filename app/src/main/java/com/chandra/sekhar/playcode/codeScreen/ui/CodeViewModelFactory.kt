@@ -1,4 +1,4 @@
-package com.chandra.sekhar.playcode.codeScreen
+package com.chandra.sekhar.playcode.codeScreen.ui
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

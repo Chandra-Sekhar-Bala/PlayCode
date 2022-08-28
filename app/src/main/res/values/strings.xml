@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Play Code</string>
+    <string name="time_and_memory">Time: %ss : Memory: %s</string>
 </resources>
