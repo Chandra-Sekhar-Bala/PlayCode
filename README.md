@@ -20,7 +20,7 @@ https://user-images.githubusercontent.com/57448981/187533362-fcaa0ce9-c051-44e5-
   - [Firebase ML kit](https://firebase.google.com/docs/ml-kit)
 
 ## Problems 🥺
-Cannot detect handwritten text 😣 as it's a drawback of the ML kit. Here [Google Cloud Vision](https://cloud.google.com/vision/) works fine. But for that, I need a billing account that includes a credit card, and not me my friends or family have one. That's why I cannot continue this project 😓
+As you can see in demo, Firebase ML kit cannot detect handwritten text properly 😣. Here [Google Cloud Vision](https://cloud.google.com/vision/) works fine. But for that, I need a billing account that includes a credit card, and not me my friends or family have one. That's why I cannot continue this project 😓
 
 # Developep Setup 
 1. Fork this project 
