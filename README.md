@@ -19,10 +19,10 @@ https://user-images.githubusercontent.com/57448981/187533362-fcaa0ce9-c051-44e5-
 - Text recognisition
   - [Firebase ML kit](https://firebase.google.com/docs/ml-kit)
 
-## Problems 🥺
+## Known Bugs 🐞
 As you can see in demo, Firebase ML kit cannot detect handwritten text properly 😣. Here [Google Cloud Vision](https://cloud.google.com/vision/) works fine. But for that, I need a billing account that includes a credit card, and not me my friends or family have one. That's why I cannot continue this project 😓
 
-# Developep Setup 
+# How to Contribute ?
 1. Fork this project 
 2. Go to Android studio or [download from here](https://developer.android.com/studio)
 3. Click on -> File -> New -> Project from version control
@@ -32,7 +32,7 @@ git clone https://github.com/<Username>/PlayCode.git
 ```
 5. Let android studio download the code
 6. If asked, click "sync gradle"
-7. Create a virtual device following this link
+7. Create a virtual device following this [link](https://developer.android.com/studio/run/managing-avds)
 8. Click on Run tab and then Run app
 
 **Whooh done 🦄**
