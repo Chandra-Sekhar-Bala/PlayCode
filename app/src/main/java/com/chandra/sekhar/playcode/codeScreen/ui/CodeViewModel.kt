@@ -1,10 +1,12 @@
 package com.chandra.sekhar.playcode.codeScreen.ui
 
+import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 enum class ApiStatus{LOADING, ERROR, DONE}
-class CodeViewModel(private val context: Context) : ViewModel() {
+class CodeViewModel(application: Application) : AndroidViewModel(application) {
+    private val context = getApplication<Application>()
 
     private var uri : Uri? = null
     private var _code = MutableLiveData<String>()
@@ -39,7 +42,6 @@ class CodeViewModel(private val context: Context) : ViewModel() {
      * **/
     private val _status = MutableLiveData<ApiStatus>()
     val status : LiveData<ApiStatus> get() = _status
-//    private var functions = Firebase.functions
 
     fun setUri(uri: Uri) {
         this.uri = uri
@@ -80,7 +82,7 @@ class CodeViewModel(private val context: Context) : ViewModel() {
      * **/
 
     fun runCode(programModel: ProgramModel){
-        viewModelScope.launch {
+        viewModelScope.launch{
             runOverCloud(programModel)
         }
     }

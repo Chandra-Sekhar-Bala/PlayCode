@@ -3,6 +3,7 @@ package com.chandra.sekhar.playcode.codeScreen.ui
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MotionEventCompat
 import androidx.lifecycle.ViewModelProvider
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
@@ -21,17 +23,6 @@ import java.util.regex.Pattern
 
 
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-
-    //Language Keywords
-    private val PATTERN_KEYWORDS: Pattern = Pattern.compile(
-        "\\b(abstract|boolean|break|byte|case|catch" +
-                "|char|class|continue|default|do|double|else" +
-                "|enum|extends|final|finally|float|for|if" +
-                "|implements|import|instanceof|int|interface" +
-                "|long|native|new|null|package|private|protected" +
-                "|public|return|short|static|strictfp|super|switch" +
-                "|synchronized|this|throw|transient|try|void|volatile|while)\\b"
-    )
 
     private val permissions: Array<String> = arrayOf(
         android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -56,7 +47,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         registerForPermission.launch(permissions)
 
         // load viewModel
-        val viewModelFactory = CodeViewModelFactory(this)
+        val viewModelFactory = CodeViewModelFactory(application)
         viewModel = ViewModelProvider(this@MainActivity, viewModelFactory)[CodeViewModel::class.java]
 
         // set lifecycle owner
@@ -71,7 +62,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         bind.codeView.setLineNumberTextColor(Color.GRAY)
         bind.codeView.setLineNumberTextSize(35f)
         bind.codeView.setEnableAutoIndentation(true)
-        bind.codeView.addSyntaxPattern(PATTERN_KEYWORDS, Color.CYAN)
+        bind.codeView.addSyntaxPattern(PatternUtility.Type_1, Color.CYAN)
     }
 
 
@@ -113,10 +104,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             pickAndCropImage()
         }
         /*
-        * pass data to the ViewModel, call intern and get th work done
+        * pass data to the ViewModel, call api and get the work done
         * */
         bind.runCode.setOnClickListener{
-            if(bind.codeView.text.isNotEmpty() && position!= 0){
+            if(bind.codeView.text.isNotEmpty() && position != 0){
                 val model = ProgramModel(bind.codeView.text.toString(), language[position], bind.inputText.text.toString())
                 viewModel.runCode(model)
             }else{
@@ -143,7 +134,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     /*
     * Gives option to user to choose between Camera and Gallery +
-    * Crop feature the chosen image
+    * Crop feature on the chosen image
     * */
     private fun pickAndCropImage() {
         cropImage.launch(
@@ -162,8 +153,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-
-    // Check for multiple permission
+    /**
+     * Check for multiple permission
+     */
     private val registerForPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ it ->
         if(!it.entries.all { it.value }){
             Toast.makeText(this@MainActivity, "Need permission to use this app", Toast.LENGTH_SHORT).show()
@@ -172,6 +164,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    /**
+     * Position callback for Spinner
+     */
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         this.position = position
     }
