@@ -1,0 +1,68 @@
+name: Android Build
+
+on: 
+  push:
+    branches: [ 'main' ]
+  
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build 
+      run: ./gradlew build
+      
+    - name: Run Unit Test
+      run: ./gradlew test  --stacktrace
+      
+  ui-testing:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [23]
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+        
+      - uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+     
+      - name: Execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Run UI Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          emulator-build: 7425822
+          api-level: ${{ matrix.api-level }}
+          arch: x86_64
+          script: ./gradlew connectedDebugAndroidTest
+          
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: ./app/build/reports/androidTests
