@@ -9,7 +9,27 @@ Now Teachers can grab their smartphones and click a picture of code from paper. 
 - Scan code from the camera and Run 
 - Load code from the gallery and Run
 - Write code and Run
+
+
+<!--screenshots-->
+## ScreenShots
+<p align = "center">
+<img src="https://github.com/Chandra-Sekhar-Bala/PlayCode/assets/57448981/f81a90ac-9948-4932-ae33-b2e7b98c0ab0" width=500/>
+<img src="https://github.com/Chandra-Sekhar-Bala/PlayCode/assets/57448981/2e436ca9-a4d2-4997-b319-be6a03bb2787" width=500/>
+<img src="https://github.com/Chandra-Sekhar-Bala/PlayCode/assets/57448981/4650dbeb-83be-4293-928d-bbdae243ddf2" width=500/>
+
+</p>
+
+
+### Watch on youtube
+
+<a href="https://youtu.be/2qfQ2m5tJXM">
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/57448981/237409266-ff16d5e8-7c34-48a5-9162-b0f96589f29b.png" width="80" />
+</a>
+
+
 # Demo 🦾
+
 https://user-images.githubusercontent.com/57448981/187533362-fcaa0ce9-c051-44e5-b56a-b9e06e7326c2.mp4
 
 # Tech Stack 👨🏽‍💻
